@@ -1,0 +1,152 @@
+@echo off
+:: Türkçe karakter desteği
+chcp 1254 > NUL 2>&1
+
+:: Yönetici yetkisi kontrolü ve yükseltme
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+if '%errorlevel%' NEQ '0' (
+    echo Yönetici yetkisi isteniyor...
+    goto UACPrompt
+) else ( 
+    goto gotAdmin 
+)
+
+:UACPrompt
+    :: VBScript ile yönetici yetkisi alma
+    set "vbsFile=%temp%\getadmin.vbs"
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%vbsFile%"
+    echo UAC.ShellExecute "%~s0", "", "", "runas", 1 >> "%vbsFile%"
+    call "%vbsFile%"
+    del "%vbsFile%"
+    exit /B
+
+:gotAdmin
+    :: Çalışma dizinini script konumuna ayarla
+    pushd "%CD%"
+    CD /D "%~dp0"
+
+:: Konsol başlığı ve renk ayarı (0A = Siyah arka plan, Açık yeşil yazı)
+title pipiCleaner
+color 0A
+
+:: Versiyon değişkenini belirle
+set version=v1.0.0
+
+:: ASCII Art Logo ve Program Başlığı
+echo.
+echo            _       _ ________                          
+echo     ____  (_)___  (_) ____/ /__  ____ _____  ___  _____
+echo    / __ \/ / __ \/ / /   / / _ \/ __ \`/ __ \/ _ \/ ___/
+echo   / /_/ / / /_/ / / /___/ /  __/ /_/ / / / /  __/ /    
+echo  / .___/_/ .___/_/\____/_/\___/\__,_/_/ /_/\___/_/     
+echo /_/     /_/                                            
+echo.
+echo             pipiCleaner - Sistem Temizlik Aracı %version%
+echo ================================================
+
+:: Temizlenecek alanların listesi
+echo.
+echo Temizlenecek alanlar:
+echo - Geçici Dosyalar (Temp Klasörü)
+echo - Prefetch Önbelleği
+echo - Geri Dönüşüm Kutusu
+echo - Son Kullanılanlar
+echo - Windows Güncelleme Önbelleği
+echo - İnternet Geçici Dosyaları
+echo.
+
+:: Kullanıcı onayı alma
+echo Temizliğe başlamak için 'E' tuşuna, iptal etmek için 'H' tuşuna basın.
+choice /C EH /N /M "Devam etmek istiyor musunuz (E/H)? "
+
+:: İptal durumu kontrolü
+if %errorlevel%==2 (
+    echo.
+    echo İşlem iptal edildi.
+	echo.
+    echo Çıkmak için bir tuşa basın.
+    pause >nul 2>&1
+    exit
+)
+
+echo.
+echo Temizlik başlıyor...
+echo.
+
+:: Temp Klasörü Temizleme
+echo Geçici dosyalar temizleniyor...
+del /f /s /q "%temp%\*.*" >nul 2>&1
+for /d %%i in ("%temp%\*") do rd /s /q "%%i" >nul 2>&1
+if %errorlevel%==0 (
+    echo [+] TEMP klasörü temizlendi
+	echo.
+    md %temp% >nul 2>&1
+) else (
+    echo [X] TEMP klasörü temizlenemedi
+	echo.
+)
+
+:: Prefetch Önbelleği Temizleme
+echo Prefetch önbelleği temizleniyor...
+del /s /q C:\Windows\Prefetch\*.* >nul 2>&1
+if %errorlevel%==0 (
+    echo [+] Prefetch önbelleği temizlendi
+	echo.
+) else (
+    echo [X] Prefetch önbelleği temizlenemedi
+	echo.
+)
+
+:: Geri Dönüşüm Kutusu Temizleme
+echo Geri Dönüşüm Kutusu temizleniyor...
+rd /s /q %systemdrive%\$Recycle.bin >nul 2>&1
+if %errorlevel%==0 (
+    echo [+] Geri Dönüşüm Kutusu temizlendi
+	echo.
+) else (
+    echo [X] Geri Dönüşüm Kutusu temizlenemedi
+	echo.
+)
+
+:: Son Kullanılanlar Temizleme
+echo Son kullanılanlar temizleniyor...
+del /f /s /q %APPDATA%\Microsoft\Windows\Recent\*.* >nul 2>&1
+if %errorlevel%==0 (
+    echo [+] Son kullanılanlar temizlendi
+	echo.
+) else (
+    echo [X] Son kullanılanlar temizlenemedi
+	echo.
+)
+
+:: Windows Update Önbelleği Temizleme
+echo Windows güncelleme önbelleği temizleniyor...
+del /s /q C:\Windows\SoftwareDistribution\Download\*.* >nul 2>&1
+if %errorlevel%==0 (
+    echo [+] Windows güncelleme önbelleği temizlendi
+	echo.
+) else (
+    echo [X] Windows güncelleme önbelleği temizlenemedi
+	echo.
+)
+
+:: İnternet Geçici Dosyaları Temizleme
+echo İnternet geçici dosyaları temizleniyor...
+del /s /q "%LOCALAPPDATA%\Microsoft\Windows\INetCache\*.*" >nul 2>&1
+if %errorlevel%==0 (
+    echo [+] İnternet geçici dosyaları temizlendi
+	echo.
+) else (
+    echo [X] İnternet geçici dosyaları temizlenemedi
+	echo.
+)
+
+:: Temizlik Sonu
+echo.
+echo ================================================
+echo                Temizlik Tamamlandı!
+echo ================================================
+echo.
+echo Çıkmak için bir tuşa basın.
+pause >nul 2>&1
+exit
