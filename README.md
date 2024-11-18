@@ -1,8 +1,8 @@
-# pipiCleaner - Sistem Temizlik Aracı
+# 🚀 pipiCleaner - Sistem Temizlik Aracı
 
 [![GitHub Release (latest by date)](https://img.shields.io/github/v/release/scropoolISreal/pipiCleaner)](https://github.com/scropoolISreal/pipiCleaner/releases/latest)
 
-#pipiTeam 2024
+@pipiHasanTakke 2024
 
 ---------------------------------------------------------------------------
 
