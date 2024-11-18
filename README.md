@@ -1,10 +1,10 @@
+# pipiCleaner - Sistem Temizlik Aracı
 
-#            _       _ ________                          
-#     ____  (_)___  (_) ____/ /__  ____ _____  ___  _____
-#    / __ \/ / __ \/ / /   / / _ \/ __ \`/ __ \/ _ \/ ___/
-#   / /_/ / / /_/ / / /___/ /  __/ /_/ / / / /  __/ /    
-#  / .___/_/ .___/_/\____/_/\___/\__,_/_/ /_/\___/_/     
-# /_/     /_/                                            
+[![GitHub Release (latest by date)](https://img.shields.io/github/v/release/scropoolISreal/pipiCleaner)](https://github.com/scropoolISreal/pipiCleaner/releases/latest)
+
+#pipiTeam 2024
+
+---------------------------------------------------------------------------
 
 ## EN: a batch tool that automates the cleaning of junk files on your system.
 
