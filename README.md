@@ -2,7 +2,7 @@
 
 [![GitHub Release (latest by date)](https://img.shields.io/github/v/release/scropoolISreal/pipiCleaner)](https://github.com/scropoolISreal/pipiCleaner/releases/latest)
 
-@pipiHasanTakke 2024
+`@pipiHasanTakke 2024`
 
 ---------------------------------------------------------------------------
 
